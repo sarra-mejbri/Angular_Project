@@ -1,15 +1,17 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Conference } from '../../models/conference';
+import { ORGANIZERS } from '../../data/organizers';
+import { OrganizerList } from '../../components/organizer-list/organizer-list';
 
 @Component({
   selector: 'app-home',
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule, OrganizerList],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
-  // Liste statique des conférences stockée dans un Signal
   conferences = signal<Conference[]>([
     {
       id: 1,
@@ -18,6 +20,7 @@ export class Home {
       date: new Date('2027-01-15'),
       adress: 'Palais des Congrès, Tunis',
       available_Places: 120,
+      organizers: [ORGANIZERS[0], ORGANIZERS[2]],
     },
     {
       id: 2,
@@ -26,6 +29,7 @@ export class Home {
       date: new Date('2027-02-03'),
       adress: 'Technopole El Ghazala, Ariana',
       available_Places: 80,
+      organizers: [ORGANIZERS[1]],
     },
     {
       id: 3,
@@ -34,6 +38,7 @@ export class Home {
       date: new Date('2027-03-20'),
       adress: 'Hôtel Mövenpick, Sousse',
       available_Places: 15,
+      organizers: [ORGANIZERS[1], ORGANIZERS[2], ORGANIZERS[3]],
     },
     {
       id: 4,
@@ -42,6 +47,7 @@ export class Home {
       date: new Date('2027-04-10'),
       adress: 'Centre Culturel, Sfax',
       available_Places: 0,
+      organizers: [ORGANIZERS[3]],
     },
     {
       id: 5,
@@ -50,6 +56,7 @@ export class Home {
       date: new Date('2027-05-06'),
       adress: 'ESPRIT, Ariana',
       available_Places: 45,
+      organizers: [ORGANIZERS[0], ORGANIZERS[3]],
     },
     {
       id: 6,
@@ -58,6 +65,25 @@ export class Home {
       date: new Date('2027-06-18'),
       adress: 'Cité de la Culture, Tunis',
       available_Places: 8,
+      organizers: [], // aucun organisateur → teste le cas @empty
     },
   ]);
+
+  // Two-way binding : texte de recherche
+  searchTitle = signal('');
+
+  // Liste filtrée, recalculée automatiquement quand searchTitle ou conferences change
+  filteredConferences = computed(() => {
+    const search = this.searchTitle().trim().toLowerCase();
+    return this.conferences().filter((c) => c.title.toLowerCase().includes(search));
+  });
+
+  // Event binding : participer = une place disponible en moins
+  participate(conference: Conference): void {
+    this.conferences.update((list) =>
+      list.map((c) =>
+        c.id === conference.id ? { ...c, available_Places: c.available_Places - 1 } : c,
+      ),
+    );
+  }
 }

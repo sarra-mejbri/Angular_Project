@@ -1,0 +1,26 @@
+<section class="container pb-5">
+  <!-- Bonus : nombre d'organisateurs dans le titre -->
+  <h2 class="fw-bold text-center mb-4">Organisateurs ({{ organizers().length }})</h2>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+    @for (organizer of organizers(); track organizer.id) {
+      <div class="col">
+        <div class="card h-100 border-0 shadow-sm text-center p-4 organizer-card">
+          <img
+            [src]="organizer.picture"
+            [alt]="organizer.name"
+            class="rounded-circle mx-auto mb-3"
+            width="110"
+            height="110"
+          />
+          <h5 class="fw-semibold mb-1">{{ organizer.name }}</h5>
+          <!-- Bonus : email cliquable -->
+          <a [href]="'mailto:' + organizer.email" class="small text-decoration-none d-block mb-2">
+            {{ organizer.email }}
+          </a>
+          <span class="badge text-bg-light border">{{ organizer.university }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</section>

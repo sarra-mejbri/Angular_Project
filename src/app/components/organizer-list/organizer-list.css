@@ -1,0 +1,11 @@
+.organizer-card {
+  transition: transform 0.2s ease;
+}
+
+.organizer-card:hover {
+  transform: translateY(-4px);
+}
+
+.organizer-card img {
+  object-fit: cover;
+}

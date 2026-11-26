@@ -1,0 +1,18 @@
+.hero {
+  background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
+}
+
+.conf-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.conf-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.conf-card img {
+  height: 200px;
+  object-fit: cover;
+}
